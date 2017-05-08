@@ -79,6 +79,18 @@
   </macro>
   <macro name="publisert-fotnote">
     <choose>
+      <if variable="issued">
+        <date prefix="(" suffix=")" variable="issued">
+          <date-part name="year"/>
+        </date>
+      </if>
+      <else>
+        <text term="no date" prefix="(" suffix=")"/>
+      </else>
+    </choose> 
+  </macro>
+  <macro name="publisert-bibliografi">
+    <choose>
       <if type="article-journal">
         <choose>
           <if variable="issued">
@@ -90,19 +102,19 @@
             <text term="no date" prefix="(" suffix=")"/>
           </else>
          </choose> 
-       </if>  
-    </choose>
-  </macro>
-  <macro name="publisert-bibliografi">
-    <choose>
-      <if variable="issued">
-        <date variable="issued">
-          <date-part prefix="(" suffix=")" name="year"/>
-        </date>
       </if>
       <else>
-        <text term="no date" prefix="(" suffix=")"/>
-      </else>
+        <choose>
+          <if variable="issued">
+            <date variable="issued">
+            <date-part name="year"/>
+            </date>
+          </if>
+          <else>
+            <text term="no date" prefix="(" suffix=")"/>
+          </else>
+        </choose> 
+      </else>  
     </choose>
   </macro>
   <macro name="arkivert">
