@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<style xmlns="http://purl.org/net/xbiblio/csl" class="note" version="1.0" default-locale="nb-NO" demote-non-dropping-particle="display-and-sort" page-range-format="expanded">
+  <info>
+    <title>Universitetet i Oslo Juridisk biblioteks referansestil for juridiske arbeider (Footnote with bibliography) (Norwegian Bokmål)</title>
+    <title-short>UiO-UJUR</title-short>
+    <id>http://www.zotero.org/styles/universitetet-i-oslo-juridisk-biblioteks-henvisningsstandard</id>
+    <link href="http://www.zotero.org/styles/universitetet-i-oslo-juridisk-bibliotek" rel="self"/>
+    <link href="http://www.ub.uio.no/skrive-publisere/referere/referansestiler/rettsvitenskap.html" rel="documentation"/>
+    <author>
+      <name>Hans Gunnar Slokvik Lian</name>
+      <email>h.g.s.lian@ub.uio.no</email>
+    </author>
+    <category citation-format="note"/>
+    <category field="law"/>
+    <summary>University of Oslo Law Library's reference style. Adapted for use with Norwegian legal sources.</summary>
+    <updated>2017-04-21T17:53:01+00:00</updated>
+    <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
+  </info>
+  <locale xml:lang="nb-NO">
+    <terms>
+      <term name="editor" form="verb-short">red.</term>
+      <term name="translator" form="verb-short">overs.</term>
+      <term name="translator" form="short">overs.</term>
+      <term name="editortranslator" form="verb-short">
+        <single>red. og overs.</single>
+        <multiple>red. og overs.</multiple>
+      </term>
+      <term name="editortranslator" form="verb">
+        <single>Redigert og oversatt av</single>
+        <multiple>Redigert og oversatt av</multiple>
+      </term>
+      <term name="translator" form="short">overs.</term>
+      <term name="et al."></term>
+      <term name="open-quote">"</term>
+      <term name="close-quote">"</term>
+      <term name="accessed">sitert</term>
+      <term name="no date">udatert</term>
+    </terms>
+  </locale>
+  <macro name="ansvar-fotnote">
+    <names variable="author">
+      <name form="short"/>
+    </names>
+  </macro>
+  <macro name="ansvar-bibliografi">
+    <names variable="author"/>
+  </macro>
+  <macro name="tittel-fotnote">
+    <choose>
+      <if type="article-journal">
+        <text quotes="true" variable="title"/>
+      </if>
+      <else-if type="chapter">
+        <text quotes="true" variable="title"/>
+      </else-if>
+      <else-if type="legislation">
+        <text variable="title-short"/>
+      </else-if>
+      <else-if type="legal_case">
+        <text variable="title"/>
+      </else-if>
+      <else>
+        <text font-style="italic" variable="title"/>
+      </else>
+    </choose>
+  </macro>
+  <macro name="tittel-bibliografi">
+    <choose>
+      <if type="article-journal">
+        <text quotes="true" variable="title"/>
+      </if>
+      <else-if type="chapter">
+        <text quotes="true" variable="title"/>
+      </else-if>
+      <else>    
+        <text font-style="italic" variable="title"/>
+      </else>
+    </choose>    
+  </macro>
+  <macro name="publisert-fotnote">
+    <choose>
+      <if type="article-journal">
+        <choose>
+          <if variable="issued">
+            <date prefix="(" suffix=")" variable="issued">
+              <date-part name="year"/>
+            </date>
+          </if>
+          <else>
+            <text term="no date" prefix="(" suffix=")"/>
+          </else>
+         </choose> 
+       </if>  
+    </choose>
+  </macro>
+  <macro name="publisert-bibliografi">
+    <choose>
+      <if variable="issued">
+        <date variable="issued">
+          <date-part prefix="(" suffix=")" name="year"/>
+        </date>
+      </if>
+      <else>
+        <text term="no date" prefix="(" suffix=")"/>
+      </else>
+    </choose>
+  </macro>
+  <macro name="arkivert">
+    <choose>
+      <if type="article-journal">
+        <text variable="archive" text-case="capitalize-first" prefix="(Sitert fra " suffix=")"/>
+      </if>
+    </choose>
+  </macro>    
+  <citation et-al-min="1" et-al-use-first="1">
+    <sort>
+      <key macro="ansvar-fotnote"/>
+      <key macro="tittel-fotnote"/>
+      <key macro="publisert-fotnote"/>
+    </sort>
+    <layout delimiter=", ">
+      <group delimiter=" ">
+        <choose>
+          <if type="legal_case">
+            <text macro="tittel-fotnote"/>
+          </if>
+          <else-if type="legislation">
+            <text macro="tittel-fotnote"/>
+          </else-if>
+          <else-if type="report">
+            <text macro="ansvar-fotnote"/>
+            <text variable="number"/>
+          </else-if>
+          <else>
+            <text macro="ansvar-fotnote"/>
+            <text macro="publisert-fotnote"/>
+          </else>
+        </choose>
+      </group>
+    </layout>
+  </citation>
+  <bibliography et-al-min="5" et-al-use-first="1" name-as-sort-order="first" entry-spacing="0">
+    <sort>
+      <key macro="ansvar-bibliografi"/>
+      <key macro="tittel-bibliografi"/>
+      <key variable="edition"/>
+      <key macro="publisert-bibliografi"/>
+    </sort>
+    <layout suffix=".">
+      <group delimiter=", ">
+        <text macro="ansvar-bibliografi"/>
+        <text macro="tittel-bibliografi"/>
+      </group>
+      <group prefix=", " delimiter=" ">
+        <text font-style="italic" variable="container-title"/>
+        <text prefix="Årg. " variable="volume"/>
+        <text suffix=". utg.," variable="edition"/>
+        <text macro="publisert-bibliografi"/>
+      </group>
+      <text prefix=", s. " suffix=" " variable="page"/>
+      <text macro="arkivert"/>
+    </layout>
+  </bibliography>
+</style>
