@@ -40,10 +40,17 @@
   <macro name="ansvar-fotnote">
     <names variable="author">
       <name form="short"/>
+	</names>  
+	<names variable="editor">
+      <name form="short"/>
     </names>
   </macro>
   <macro name="ansvar-bibliografi">
-    <names variable="author"/>
+    <names variable="author">
+	  <substitute>
+	  	<names variable="editor"/>
+	  </substitute>
+	</names>  
   </macro>
   <macro name="tittel-fotnote">
     <choose>
