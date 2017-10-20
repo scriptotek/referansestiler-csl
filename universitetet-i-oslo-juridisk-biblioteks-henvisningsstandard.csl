@@ -37,6 +37,21 @@
       <term name="no date">udatert</term>
     </terms>
   </locale>
+
+<!--
+TODO:
+Lag makroer for følgende referansetyper:
+	- Dommer
+	- Document (se etterhvert om det blir behov for dette)
+	- E-post
+	- Tidsskriftsartikler
+	- Magazine Article (klimamagasiner, fagblad - ikke nødvendigvis periodika, webpage
+	  kan kanskje brukes)
+	- Thesis
+	- Forarbeider (høringer, m.m. Holder ofte med navnet på forarbeidet i tittelfelt)
+	- Kommentarverker - del av redighert bok generelt
+ -->
+
   <macro name="ansvar-fotnote">
     <names variable="author">
       <name form="short"/>
@@ -78,6 +93,9 @@
       </if>
       <else-if type="chapter">
         <text quotes="true" variable="title"/>
+      </else-if>
+      <else-if type="legal_case">
+        <text variable="title"/>
       </else-if>
       <else>    
         <text font-style="italic" variable="title"/>
@@ -141,7 +159,7 @@
       <group delimiter=" ">
         <choose>
           <if type="legal_case">
-            <text macro="tittel-fotnote"/>
+            <text macro="tittel-bibliografi"/>
           </if>
           <else-if type="legislation">
             <text macro="tittel-fotnote"/>
