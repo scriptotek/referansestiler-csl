@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <style xmlns="http://purl.org/net/xbiblio/csl" class="note" version="1.0" default-locale="nb-NO" demote-non-dropping-particle="display-and-sort" page-range-format="expanded">
   <info>
-    <title>Universitetet i Oslo Juridisk biblioteks referansestil for juridiske arbeider (Footnote with bibliography) (Norwegian Bokmål)</title>
+    <title>University of Oslo Law Library's citation style for legal works (Footnote with bibliography) (Norwegian Bokmål)</title>
     <title-short>UiO-UJUR</title-short>
     <id>http://www.zotero.org/styles/universitetet-i-oslo-juridisk-biblioteks-henvisningsstandard</id>
     <link href="http://www.zotero.org/styles/universitetet-i-oslo-juridisk-bibliotek" rel="self"/>
@@ -12,7 +12,7 @@
     </author>
     <category citation-format="note"/>
     <category field="law"/>
-    <summary>University of Oslo Law Library's reference style. Adapted for use with Norwegian legal sources.</summary>
+    <summary>University of Oslo Law Library's citation style. Adapted primarily for use with Norwegian legal sources.</summary>
     <updated>2017-04-21T17:53:01+00:00</updated>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
   </info>
@@ -53,13 +53,24 @@ Lag makroer for følgende referansetyper:
  -->
 
   <macro name="ansvar-fotnote">
-    <names variable="author">
-      <name form="short"/>
-	</names>  
-	<names variable="editor">
-      <name form="short"/>
-    </names>
+    <choose>
+      <if type="chapter">
+        <text variable="author"/>
+        <names variable="author">
+          <name form="short"/>
+	    </names>
+      </if>
+      <else>
+	    <names variable="author">
+	      <name form="short"/>
+		</names>
+		<names variable="editor">
+	      <name form="short"/>
+	    </names>
+      </else>
+    </choose>
   </macro>
+
   <macro name="ansvar-bibliografi">
     <names variable="author">
 	  <substitute>
@@ -67,6 +78,8 @@ Lag makroer for følgende referansetyper:
 	  </substitute>
 	</names>  
   </macro>
+
+
   <macro name="tittel-fotnote">
     <choose>
       <if type="article-journal">
@@ -86,6 +99,7 @@ Lag makroer for følgende referansetyper:
       </else>
     </choose>
   </macro>
+
   <macro name="tittel-bibliografi">
     <choose>
       <if type="article-journal">
@@ -97,10 +111,24 @@ Lag makroer for følgende referansetyper:
       <else-if type="legal_case">
         <text variable="title"/>
       </else-if>
+      <else-if type="legislation">
+      	<text variable="title"/>
+      </else-if>
       <else>    
         <text font-style="italic" variable="title"/>
       </else>
-    </choose>    
+    </choose>
+  </macro>
+
+  <macro name="tittel-beholder-bibliografi">
+  	<choose>
+  	  <if type="chapter">
+  		<text suffix=", " font-style="italic" variable="container-title"/>
+  	  </if>
+  	  <else>
+  	  	<text font-style="italic" variable="container-title"/>
+  	  </else>
+    </choose>
   </macro>
   <macro name="publisert-fotnote">
     <choose>
@@ -148,7 +176,10 @@ Lag makroer for følgende referansetyper:
         <text variable="archive" text-case="capitalize-first" prefix="(Sitert fra " suffix=")"/>
       </if>
     </choose>
-  </macro>    
+  </macro>
+
+
+
   <citation et-al-min="1" et-al-use-first="1">
     <sort>
       <key macro="ansvar-fotnote"/>
@@ -176,26 +207,45 @@ Lag makroer for følgende referansetyper:
       </group>
     </layout>
   </citation>
+
+
   <bibliography et-al-min="5" et-al-use-first="1" name-as-sort-order="first" entry-spacing="0">
     <sort>
       <key macro="ansvar-bibliografi"/>
       <key macro="tittel-bibliografi"/>
       <key variable="edition"/>
+      <key variable="publisher-place"/>
+      <key variable="publisher"/>
       <key macro="publisert-bibliografi"/>
     </sort>
     <layout suffix=".">
-      <group delimiter=", ">
-        <text macro="ansvar-bibliografi"/>
-        <text macro="tittel-bibliografi"/>
-      </group>
-      <group prefix=", " delimiter=" ">
-        <text font-style="italic" variable="container-title"/>
-        <text prefix="Årg. " variable="volume"/>
-        <text suffix=". utg.," variable="edition"/>
-        <text macro="publisert-bibliografi"/>
-      </group>
-      <text prefix=", s. " suffix=" " variable="page"/>
-      <text macro="arkivert"/>
+      <choose>
+      	<if type="legal_case">
+      	  <text macro="tittel-bibliografi"/>
+      	</if>
+        <else-if type="legislation">
+          <text suffix="    " macro="publisert-bibliografi"/>
+          <text macro="tittel-bibliografi"/>
+        </else-if>
+      	<else>
+	      <group delimiter=", ">
+	        <text macro="ansvar-bibliografi"/>
+	        <text macro="tittel-bibliografi"/>
+	      </group>
+	      <group prefix=", " delimiter=" ">
+	        <text macro="tittel-beholder-bibliografi"/>
+	        <text prefix="Årg. " variable="volume"/>
+	        <text suffix=". utg.," variable="edition"/>
+	        <text suffix=": " variable="publisher-place"/>
+	        <text suffix=", " variable="publisher"/>
+	        <text macro="publisert-bibliografi"/>
+	      </group>
+	      <group prefix=", " delimiter=" ">
+	        <text prefix="s. " variable="page"/>
+	        <text macro="arkivert"/>
+	      </group>
+        </else>
+      </choose>
     </layout>
   </bibliography>
 </style>
