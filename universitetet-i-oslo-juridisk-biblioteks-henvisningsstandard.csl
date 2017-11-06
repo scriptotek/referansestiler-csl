@@ -12,7 +12,7 @@
     </author>
     <category citation-format="note"/>
     <category field="law"/>
-    <summary>University of Oslo Law Library's citation style. Adapted primarily for use with Norwegian legal sources.</summary>
+    <summary>University of Oslo Law Library's citation style. Created for use primarily with Norwegian legal sources.</summary>
     <updated>2017-04-21T17:53:01+00:00</updated>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
   </info>
@@ -41,9 +41,8 @@
 <!--
 TODO:
 Lag makroer for følgende referansetyper:
-	- Dommer
+
 	- Document (se etterhvert om det blir behov for dette)
-	- E-post
 	- Tidsskriftsartikler
 	- Magazine Article (klimamagasiner, fagblad - ikke nødvendigvis periodika, webpage
 	  kan kanskje brukes)
@@ -131,7 +130,7 @@ Lag makroer for følgende referansetyper:
   <macro name="tittel-beholder-bibliografi">
   	<choose>
   	  <if type="chapter">
-  		<text suffix=", " font-style="italic" variable="container-title"/>
+  		<text prefix="i " suffix=", " font-style="italic" variable="container-title"/>
   	  </if>
   	  <else>
   	  	<text font-style="italic" variable="container-title"/>
@@ -146,6 +145,15 @@ Lag makroer for følgende referansetyper:
           <date-part name="year"/>
         </date>
       </if>
+      <else-if type="personal_communication">
+        <choose>
+          <if variable="accessed">
+            <date variable="accessed" prefix="(" suffix=")">
+              <date-part name="year"/>
+            </date>  
+          </if>
+        </choose>  
+      </else-if>
       <else>
         <text term="no date" prefix="(" suffix=")"/>
       </else>
@@ -160,12 +168,12 @@ Lag makroer for følgende referansetyper:
             <date prefix="(" suffix=")" variable="issued">
               <date-part name="year"/>
             </date>
-          </if>
+          </if>          
           <else>
             <text term="no date" prefix="(" suffix=")"/>
           </else>
-         </choose> 
-      </if>
+        </choose>
+      </if>  	
       <else>
         <choose>
           <if variable="issued">
@@ -189,11 +197,22 @@ Lag makroer for følgende referansetyper:
   </macro>
 
   <macro name="lest-dato">
-    <date variable="accessed" prefix=" [Sitert " suffix="]">
-      <date-part name="day" form="numeric" suffix=". "/>
-      <date-part name="month" form="long" suffix=" "/>
-      <date-part name="year"/>
-    </date>
+    <choose>
+      <if type="personal_communication">
+      	<date variable="accessed" prefix=", e-post, ">
+          <date-part name="day" form="numeric" suffix=". "/>
+          <date-part name="month" form="long" suffix=" "/>
+          <date-part name="year"/>
+        </date>  
+      </if>
+      <else>
+        <date variable="accessed" prefix=" [Sitert " suffix="]">
+          <date-part name="day" form="numeric" suffix=". "/>
+          <date-part name="month" form="long" suffix=" "/>
+          <date-part name="year"/>
+        </date>
+      </else>
+    </choose>  
   </macro>
 
   <citation et-al-min="1" et-al-use-first="1">
@@ -243,6 +262,10 @@ Lag makroer for følgende referansetyper:
           <text suffix="    " macro="publisert-bibliografi"/>
           <text macro="tittel-bibliografi"/>
         </else-if>
+        <else-if type="personal_communication">
+          <text macro="ansvar-bibliografi"/>
+          <text macro="lest-dato"/>	
+        </else-if>	
       	<else>
 	      <group delimiter=". ">
 	        <text macro="ansvar-bibliografi"/>
