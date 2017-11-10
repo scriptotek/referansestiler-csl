@@ -4,7 +4,7 @@
     <title>University of Oslo - Law Library (Footnote with bibliography) (Norwegian Bokmål)</title>
     <title-short>UiO-UJUR</title-short>
     <id>http://www.zotero.org/styles/uio-law</id>
-    <link href="http://www.zotero.org/styles/university-of-oslo-law-library-no-bm" rel="self"/>
+    <link href="http://www.zotero.org/styles/universitetet-i-oslo-law-library-no-bm" rel="self"/>
     <link href="http://www.ub.uio.no/skrive-publisere/referere/referansestiler/rettsvitenskap.html" rel="documentation"/>
     <author>
       <name>Hans Gunnar Slokvik Lian</name>
@@ -171,19 +171,7 @@ Lag makroer for følgende referansetyper:
           </else>
         </choose>
       </if>
-      <else-if type="article-newspaper">
-        <choose>
-          <if variable="issued">
-            <date prefix="(" suffix=")" variable="issued">
-              <date-part name="year"/>
-            </date>
-          </if>          
-          <else>
-            <text term="no date" prefix="(" suffix=")"/>
-          </else>
-        </choose>
-      </else-if>
-      <else-if type="article-magazine">
+      <else-if type="article-newspaper article-magazine" match="any">
         <choose>
           <if variable="issued">
             <date prefix="(" suffix=")" variable="issued">
