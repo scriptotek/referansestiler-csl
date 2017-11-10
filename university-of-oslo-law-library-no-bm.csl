@@ -4,7 +4,7 @@
     <title>University of Oslo - Law Library (Footnote with bibliography) (Norwegian Bokmål)</title>
     <title-short>UiO-UJUR</title-short>
     <id>http://www.zotero.org/styles/uio-law</id>
-    <link href="http://www.zotero.org/styles/universitetet-i-oslo-juridisk-bibliotek" rel="self"/>
+    <link href="http://www.zotero.org/styles/university-of-oslo-law-library-no-bm" rel="self"/>
     <link href="http://www.ub.uio.no/skrive-publisere/referere/referansestiler/rettsvitenskap.html" rel="documentation"/>
     <author>
       <name>Hans Gunnar Slokvik Lian</name>
@@ -44,8 +44,7 @@ Lag makroer for følgende referansetyper:
 
 	- Document (se etterhvert om det blir behov for dette)
 	- Tidsskriftsartikler
-	- Magazine Article (klimamagasiner, fagblad - ikke nødvendigvis periodika, webpage
-	  kan kanskje brukes)
+	- Magazine Article (klimamagasiner, fagblad - ikke nødvendigvis periodika)
 	- Avisartikler
 	- Thesis
 	- Forarbeider (høringer, m.m. Holder ofte med navnet på forarbeidet i tittelfelt)
@@ -107,6 +106,12 @@ Lag makroer for følgende referansetyper:
       <else-if type="chapter">
         <text quotes="true" variable="title"/>
       </else-if>
+      <else-if type="article-newspaper">
+        <text quotes="true" variable="title"/>
+      </else-if>  
+      <else-if type="article-magazine">
+        <text quotes="true" variable="title"/>
+      </else-if>
       <else-if type="legal_case">
         <text variable="title"/>
       </else-if>
@@ -122,7 +127,7 @@ Lag makroer for følgende referansetyper:
   <macro name="tittel-beholder-bibliografi">
   	<choose>
   	  <if type="chapter">
-  		<text prefix="i " suffix=", " font-style="italic" variable="container-title"/>
+  		  <text prefix="i " suffix=", " font-style="italic" variable="container-title"/>
   	  </if>
   	  <else>
   	  	<text font-style="italic" variable="container-title"/>
@@ -165,7 +170,31 @@ Lag makroer for følgende referansetyper:
             <text term="no date" prefix="(" suffix=")"/>
           </else>
         </choose>
-      </if>  	
+      </if>
+      <else-if type="article-newspaper">
+        <choose>
+          <if variable="issued">
+            <date prefix="(" suffix=")" variable="issued">
+              <date-part name="year"/>
+            </date>
+          </if>          
+          <else>
+            <text term="no date" prefix="(" suffix=")"/>
+          </else>
+        </choose>
+      </else-if>
+      <else-if type="article-magazine">
+        <choose>
+          <if variable="issued">
+            <date prefix="(" suffix=")" variable="issued">
+              <date-part name="year"/>
+            </date>
+          </if>          
+          <else>
+            <text term="no date" prefix="(" suffix=")"/>
+          </else>
+        </choose>
+      </else-if>
       <else>
         <choose>
           <if variable="issued">
@@ -196,7 +225,7 @@ Lag makroer for følgende referansetyper:
           <date-part name="month" form="long" suffix=" "/>
           <date-part name="year"/>
         </date>  
-      </if>
+      </if> 
       <else>
         <date variable="accessed" prefix=" [Sitert " suffix="]">
           <date-part name="day" form="numeric" suffix=". "/>
@@ -207,13 +236,21 @@ Lag makroer for følgende referansetyper:
     </choose>  
   </macro>
 
+  <macro name="publisert-dato-bibliografi">
+    <date variable="issued">
+      <date-part name="day" form="numeric" suffix=". "/>
+      <date-part name="month" form="long" suffix=" "/>
+      <date-part name="year"/>
+    </date>
+  </macro>   
+
   <macro name="lenke-bibliografi">
-  	<names variable="DOI">
+    <names variable="DOI">
   		<substitute>
   			<names variable="extra"/>
   			<names variable="URL"/>
   		</substitute>
-  	</names>	
+  	</names>
   </macro>
 
   <citation et-al-min="1" et-al-use-first="1">
@@ -267,28 +304,55 @@ Lag makroer for følgende referansetyper:
           <text macro="ansvar-bibliografi"/>
           <text macro="lest-dato"/>	
         </else-if>
-        <else-if type="">
-
-        </else-if>	
+        <else-if type="article-newspaper">
+          <group suffix=". ">
+            <text macro="ansvar-bibliografi"/>
+          </group>
+          <group suffix=" ">  
+            <text macro="publisert-bibliografi"/>
+          </group>  
+          <group delimiter=", ">   
+            <text macro="tittel-bibliografi"/>
+            <text macro="tittel-beholder-bibliografi"/>
+            <text variable="URL"/>
+          </group>
+          <group>
+            <text macro="lest-dato"/>
+          </group>  
+        </else-if>
+        <else-if type="article-magazine">
+          <group suffix=". ">
+            <text macro="ansvar-bibliografi"/>
+          </group>
+          <group suffix=" ">  
+            <text macro="publisert-bibliografi"/>
+          </group>  
+          <group delimiter=", ">   
+            <text macro="tittel-bibliografi"/>
+            <text macro="tittel-beholder-bibliografi"/>
+            <text macro="lest-dato"/>
+            <text macro="publisert-dato-bibliografi"/>
+          </group>
+        </else-if>
       	<else>
-	      <group delimiter=". ">
-	        <text macro="ansvar-bibliografi"/>
-	        <text macro="tittel-bibliografi"/>
-	      </group>
-	      <group prefix=", " delimiter=" ">
-	        <text macro="tittel-beholder-bibliografi"/>
-	        <text prefix="Årg. " variable="volume"/>
-	        <text suffix=". utg.," variable="edition"/>
-	        <text suffix=": " variable="publisher-place"/>
-	        <text suffix=", " variable="publisher"/>
-	        <text macro="publisert-bibliografi"/>
-	        <text macro="lenke-bibliografi"/>
-	        <text macro="lest-dato"/>
-	      </group>
-	      <group prefix=", " delimiter=" ">
-	        <text prefix="s. " variable="page"/>
-	        <text macro="arkivert"/>
-	      </group>
+	        <group delimiter=". ">
+	          <text macro="ansvar-bibliografi"/>
+	          <text macro="tittel-bibliografi"/>
+	        </group>
+	        <group prefix=", " delimiter=" ">
+	          <text macro="tittel-beholder-bibliografi"/>
+	          <text prefix="Årg. " variable="volume"/>
+	          <text suffix=". utg.," variable="edition"/>
+	          <text suffix=": " variable="publisher-place"/>
+	          <text suffix=", " variable="publisher"/>
+	          <text macro="publisert-bibliografi"/>
+	          <text macro="lenke-bibliografi"/>
+	          <text macro="lest-dato"/>
+	        </group>
+	        <group prefix=", " delimiter=" ">
+	          <text prefix="s. " variable="page"/>
+	          <text macro="arkivert"/>
+	        </group>
         </else>
       </choose>
     </layout>
