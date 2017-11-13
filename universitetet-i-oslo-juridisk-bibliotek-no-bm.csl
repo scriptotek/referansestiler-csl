@@ -43,49 +43,62 @@ TODO:
 Lag makroer for følgende referansetyper:
 
 	- Document (se etterhvert om det blir behov for dette)
-	- Tidsskriftsartikler
 	- Magazine Article (klimamagasiner, fagblad - ikke nødvendigvis periodika)
-	- Avisartikler
-	- Thesis
 	- Forarbeider (høringer, m.m. Holder ofte med navnet på forarbeidet i tittelfelt)
-	- Kommentarverker - del av redighert bok generelt
  -->
 
-  <macro name="ansvar-fotnote">
+  <macro name="type-sorting">
     <choose>
-      <if type="chapter">
-        <text variable="author"/>
-        <names variable="author">
-          <name form="short"/>
-	    </names>
+      <if type="legislation legal_case bill" match="none">
+        <text value="1"/>
       </if>
+      <else-if type="webpage">
+        <text value="2"/>
+      </else-if>
+      <else-if type="legislation">
+        <text value="3"/>
+      </else-if>
+      <else-if type="bill">
+        <text value="4"/>
+      </else-if>
+      <else-if type="legal_case">
+        <text value="5"/>
+      </else-if>
       <else>
-	    <names variable="author">
-	      <name form="short"/>
-		</names>
-		<names variable="editor">
-	      <name form="short"/>
-	    </names>
+        <text value="6"/>
       </else>
     </choose>
   </macro>
 
-  <macro name="ansvar-bibliografi">
+  <macro name="author-short">
     <names variable="author">
-	  <substitute>
-	  	<names variable="editor"/>
-	  </substitute>
+	  <name form="short"/>
+    	<substitute>
+	  	  <names variable="editor"/>
+	    </substitute>
+    </names>
+  </macro>
+
+  <macro name="author-full">
+    <names variable="author">
+      <name et-al-min="5" et-al-use-first="1" name-as-sort-order="first" and="text"/>	
+	    <substitute>
+	  	  <names variable="editor"/>
+	    </substitute>
 	</names>
   </macro>
 
-  <macro name="tittel-fotnote">
+  <macro name="editor">
+  	<names variable="editor">
+  	  <name/>
+  	</names>  
+  </macro>
+
+  <macro name="title-short">
     <choose>
-      <if type="article-journal">
+      <if type="article-journal chapter" match="any">
         <text quotes="true" variable="title"/>
       </if>
-      <else-if type="chapter">
-        <text quotes="true" variable="title"/>
-      </else-if>
       <else-if type="legislation">
         <text variable="title-short"/>
       </else-if>
@@ -98,25 +111,13 @@ Lag makroer for følgende referansetyper:
     </choose>
   </macro>
 
-  <macro name="tittel-bibliografi">
+  <macro name="title">
     <choose>
-      <if type="article-journal">
+      <if type="chapter article-journal article-newspaper article-magazine" match="any">
         <text quotes="true" variable="title"/>
       </if>
-      <else-if type="chapter">
-        <text quotes="true" variable="title"/>
-      </else-if>
-      <else-if type="article-newspaper">
-        <text quotes="true" variable="title"/>
-      </else-if>  
-      <else-if type="article-magazine">
-        <text quotes="true" variable="title"/>
-      </else-if>
-      <else-if type="legal_case">
+      <else-if type="legal_case legislation" macth="any">
         <text variable="title"/>
-      </else-if>
-      <else-if type="legislation">
-      	<text variable="title"/>
       </else-if>
       <else>    
         <text font-style="italic" variable="title"/>
@@ -124,32 +125,17 @@ Lag makroer for følgende referansetyper:
     </choose>
   </macro>
 
-  <macro name="tittel-beholder-bibliografi">
-  	<choose>
-  	  <if type="chapter">
-  		  <text prefix="i " suffix=", " font-style="italic" variable="container-title"/>
-  	  </if>
-  	  <else>
-  	  	<text font-style="italic" variable="container-title"/>
-  	  </else>
-    </choose>
-  </macro>
-
-  <macro name="publisert-fotnote">
+  <macro name="issued">
     <choose>
-      <if variable="issued">
+      <if type="personal_communication" match="none">
         <date prefix="(" suffix=")" variable="issued">
           <date-part name="year"/>
         </date>
       </if>
-      <else-if type="personal_communication">
-        <choose>
-          <if variable="accessed">
-            <date variable="accessed" prefix="(" suffix=")">
-              <date-part name="year"/>
-            </date>  
-          </if>
-        </choose>  
+      <else-if type="personal_communication" match="all">
+        <date variable="accessed" prefix="(" suffix=")">
+          <date-part name="year"/>
+        </date>   
       </else-if>
       <else>
         <text term="no date" prefix="(" suffix=")"/>
@@ -157,47 +143,28 @@ Lag makroer for følgende referansetyper:
     </choose> 
   </macro>
 
-  <macro name="publisert-bibliografi">
+  <macro name="issued-full-date">
+    <date variable="issued">
+      <date-part name="day" form="numeric" suffix=". "/>
+      <date-part name="month" form="long" suffix=" "/>
+      <date-part name="year"/>
+    </date> 
+  </macro>  
+
+  <macro name="issued-no-parenthesis">
     <choose>
-      <if type="article-journal">
-        <choose>
-          <if variable="issued">
-            <date prefix="(" suffix=")" variable="issued">
-              <date-part name="year"/>
-            </date>
-          </if>          
-          <else>
-            <text term="no date" prefix="(" suffix=")"/>
-          </else>
-        </choose>
+      <if variable="issued">
+        <date variable="issued">
+          <date-part name="year"/>
+        </date>
       </if>
-      <else-if type="article-newspaper article-magazine" match="any">
-        <choose>
-          <if variable="issued">
-            <date prefix="(" suffix=")" variable="issued">
-              <date-part name="year"/>
-            </date>
-          </if>          
-          <else>
-            <text term="no date" prefix="(" suffix=")"/>
-          </else>
-        </choose>
-      </else-if>
       <else>
-        <choose>
-          <if variable="issued">
-            <date variable="issued">
-            <date-part name="year"/>
-            </date>
-          </if>
-          <else>
-            <text term="no date" prefix="(" suffix=")"/>
-          </else>
-        </choose> 
-      </else>  
-    </choose>
+        <text term="no date"/>
+      </else>
+    </choose>  
   </macro>
-  <macro name="arkivert">
+
+  <macro name="retrieved-from">
     <choose>
       <if type="article-journal">
         <text variable="archive" text-case="capitalize-first" prefix="(Sitert fra " suffix=")"/>
@@ -205,7 +172,7 @@ Lag makroer for følgende referansetyper:
     </choose>
   </macro>
 
-  <macro name="lest-dato">
+  <macro name="accessed-date">
     <choose>
       <if type="personal_communication">
       	<date variable="accessed" prefix=", e-post, ">
@@ -222,126 +189,117 @@ Lag makroer for følgende referansetyper:
         </date>
       </else>
     </choose>  
-  </macro>
+  </macro> 
 
-  <macro name="publisert-dato-bibliografi">
-    <date variable="issued">
-      <date-part name="day" form="numeric" suffix=". "/>
-      <date-part name="month" form="long" suffix=" "/>
-      <date-part name="year"/>
-    </date>
-  </macro>   
-
-  <macro name="lenke-bibliografi">
+  <macro name="DOI-or-URL">	
     <names variable="DOI">
-  		<substitute>
-  			<names variable="extra"/>
-  			<names variable="URL"/>
-  		</substitute>
-  	</names>
+      <substitute>
+  	    <names variable="URL"/>
+      </substitute>
+    </names>  
   </macro>
 
   <citation et-al-min="1" et-al-use-first="1">
     <sort>
-      <key macro="ansvar-fotnote"/>
-      <key macro="tittel-fotnote"/>
-      <key macro="publisert-fotnote"/>
+      <key macro="author-short"/>
+      <key macro="title-short"/>
+      <key macro="issued"/>
     </sort>
     <layout delimiter=", ">
       <group delimiter=" ">
         <choose>
           <if type="legal_case">
-            <text macro="tittel-bibliografi"/>
+            <text macro="title"/>
           </if>
           <else-if type="legislation">
-            <text macro="tittel-fotnote"/>
+            <text macro="title-short"/>
           </else-if>
           <else-if type="report">
-            <text macro="ansvar-fotnote"/>
+            <text macro="author-short"/>
             <text variable="number"/>
           </else-if>
           <else>
-            <text macro="ansvar-fotnote"/>
-            <text macro="publisert-fotnote"/>
+            <text macro="author-short"/>
+            <text macro="issued"/>
           </else>
         </choose>
       </group>
     </layout>
   </citation>
 
-
-  <bibliography et-al-min="5" et-al-use-first="1" name-as-sort-order="first" entry-spacing="0">
+  <bibliography entry-spacing="0">
     <sort>
-      <key macro="ansvar-bibliografi"/>
-      <key macro="tittel-bibliografi"/>
-      <key variable="edition"/>
-      <key variable="publisher-place"/>
-      <key variable="publisher"/>
-      <key macro="publisert-bibliografi"/>
+      <key macro="type-sorting"/>
+      <key macro="author-full"/>
+      <key variable="issued"/>
+      <key variable="title"/>
     </sort>
-    <layout suffix=".">
+    <layout>
       <choose>
-      	<if type="legal_case">
-      	  <text macro="tittel-bibliografi"/>
-      	</if>
-        <else-if type="legislation">
-          <text suffix="    " macro="publisert-bibliografi"/>
-          <text macro="tittel-bibliografi"/>
+      	<if type="article-journal paper-conference" match="any">
+	      <group suffix=".">
+	        <text macro="author-full"/>
+	        <text prefix=". " macro="title"/>
+	        <text prefix=", " font-style="italic" variable="container-title"/>
+	        <text prefix=" Årg. " variable="volume"/>
+	        <text prefix=" " macro="issued"/>
+            <text prefix=", " macro="DOI-or-URL"/>
+	        <text prefix=", s. " variable="page"/>
+	        <text prefix=" " macro="retrieved-from"/>
+	      </group>
+        </if>
+        <else-if type="book thesis" match="any">
+          <group suffix=".">
+          	<text macro="author-full"/>
+          	<text prefix=". " macro="title"/>
+          	<text prefix=", " suffix=" utg." variable="edition"/>
+          	<text prefix=", " suffix=":" variable="publisher-place"/>
+          	<text prefix=" " variable="publisher"/>
+          	<text prefix=", " macro="issued-no-parenthesis"/>
+          </group>
         </else-if>
+        <else-if type="chapter" match="any">
+          <group suffix=".">
+	        <text macro="author-full"/>
+	        <text prefix=". " macro="title"/>
+	        <text prefix=", i " font-style="italic" variable="container-title"/>
+	        <text prefix=", " suffix=" (red.)" macro="editor"/>
+	        <text prefix=", " suffix=". utg.," variable="edition"/>
+	        <text prefix=", " suffix=": " variable="publisher-place"/>
+	        <text variable="publisher"/>
+	        <text prefix=", " macro="issued-no-parenthesis"/>
+	        <text prefix=", " macro="DOI-or-URL"/>
+	        <text prefix=" " macro="accessed-date"/>
+	      </group>
+	    </else-if>  
+        <else-if type="article-newspaper article-magazine" match="any">
+          <group suffix=".">
+            <text macro="author-full"/>
+            <text prefix=". " macro="issued"/>   
+            <text prefix=" " macro="title"/>
+            <text prefix=", " font-style="italic" variable="container-title"/>
+            <choose>
+              <if variable="URL" match="none">
+                <text prefix=", " macro="issued-full-date"/>
+              </if>
+              <else>
+              	<text prefix=", " variable="URL"/>
+              	<text macro="accessed-date"/>
+              </else>
+            </choose>
+          </group>  
+        </else-if>
+        <else-if type="legislation bill" match="any">
+          <text suffix="    " macro="issued-no-parenthesis"/>
+          <text macro="title"/>
+        </else-if>
+      	<else-if type="legal_case">
+      	  <text macro="title"/>
+      	</else-if>
         <else-if type="personal_communication">
-          <text macro="ansvar-bibliografi"/>
-          <text macro="lest-dato"/>	
+          <text macro="author-full"/>
+          <text macro="accessed-date"/>
         </else-if>
-        <else-if type="article-newspaper">
-          <group suffix=". ">
-            <text macro="ansvar-bibliografi"/>
-          </group>
-          <group suffix=" ">  
-            <text macro="publisert-bibliografi"/>
-          </group>  
-          <group delimiter=", ">   
-            <text macro="tittel-bibliografi"/>
-            <text macro="tittel-beholder-bibliografi"/>
-            <text variable="URL"/>
-          </group>
-          <group>
-            <text macro="lest-dato"/>
-          </group>  
-        </else-if>
-        <else-if type="article-magazine">
-          <group suffix=". ">
-            <text macro="ansvar-bibliografi"/>
-          </group>
-          <group suffix=" ">  
-            <text macro="publisert-bibliografi"/>
-          </group>  
-          <group delimiter=", ">   
-            <text macro="tittel-bibliografi"/>
-            <text macro="tittel-beholder-bibliografi"/>
-            <text macro="lest-dato"/>
-            <text macro="publisert-dato-bibliografi"/>
-          </group>
-        </else-if>
-      	<else>
-	        <group delimiter=". ">
-	          <text macro="ansvar-bibliografi"/>
-	          <text macro="tittel-bibliografi"/>
-	        </group>
-	        <group prefix=", " delimiter=" ">
-	          <text macro="tittel-beholder-bibliografi"/>
-	          <text prefix="Årg. " variable="volume"/>
-	          <text suffix=". utg.," variable="edition"/>
-	          <text suffix=": " variable="publisher-place"/>
-	          <text suffix=", " variable="publisher"/>
-	          <text macro="publisert-bibliografi"/>
-	          <text macro="lenke-bibliografi"/>
-	          <text macro="lest-dato"/>
-	        </group>
-	        <group prefix=", " delimiter=" ">
-	          <text prefix="s. " variable="page"/>
-	          <text macro="arkivert"/>
-	        </group>
-        </else>
       </choose>
     </layout>
   </bibliography>
